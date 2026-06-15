@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexMeet — Video Conference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0A1128;
+      --navy-mid:   #0D1A3A;
+      --navy-light: #111E45;
+      --cyan:       #00E5FF;
+      --blue:       #0B5CFF;
+      --text:       #F4F6F9;
+      --muted:      #6B80A8;
+      --muted-lt:   #8A9BBF;
+      --danger:     #FF3D5A;
+      --danger-dk:  #CC2040;
+      --f-display:  'Syne', sans-serif;
+      --f-body:     'Inter', sans-serif;
+      --f-mono:     'JetBrains Mono', monospace;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--f-body);
+      background: var(--navy);
+      color: var(--text);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── ENTRANCE ────────────────────────────────────────────────── */
+    #entrance-screen {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100vh;
+    }
+
+    /* Left — brand panel */
+    .entrance-brand {
+      position: relative;
+      background: linear-gradient(155deg, #0C2268 0%, var(--navy) 65%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 48px 52px;
+      overflow: hidden;
+    }
+
+    /* Subtle technical grid */
+    .entrance-brand::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+    }
+
+    /* Blue glow orb */
+    .entrance-brand::after {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(11,92,255,0.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-logomark {
+      width: 38px; height: 38px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .brand-logomark svg { width: 20px; height: 20px; fill: white; }
+
+    .brand-wordmark {
+      font-family: var(--f-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-hero {
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-eyebrow {
+      font-family: var(--f-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 22px; height: 1px;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .brand-headline {
+      font-family: var(--f-display);
+      font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin-bottom: 22px;
+    }
+
+    .brand-headline em {
+      font-style: normal;
+      color: var(--cyan);
+    }
+
+    .brand-desc {
+      font-size: 0.93rem;
+      color: var(--muted-lt);
+      line-height: 1.65;
+      max-width: 330px;
+    }
+
+    .brand-features {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .brand-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.84rem;
+      color: var(--muted-lt);
+    }
+
+    .feature-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 7px var(--cyan);
+      flex-shrink: 0;
+    }
+
+    /* Right — form panel */
+    .entrance-form-panel {
+      background: var(--navy-mid);
+      border-left: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 52px;
+    }
+
+    .form-inner { width: 100%; max-width: 360px; }
+
+    .form-heading {
+      font-family: var(--f-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      margin-bottom: 7px;
+    }
+
+    .form-sub {
+      font-size: 0.9rem;
+      color: var(--muted-lt);
+      margin-bottom: 42px;
+      line-height: 1.55;
+    }
+
+    .field { margin-bottom: 28px; }
+
+    .field-label {
+      display: block;
+      font-family: var(--f-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 11px;
+    }
+
+    /* Underline-only inputs — cleaner than boxed */
+    .field-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(255,255,255,0.1);
+      padding: 9px 0;
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .field-input::placeholder { color: var(--muted); }
+    .field-input:focus { border-bottom-color: var(--cyan); }
+
+    /* Room ID with # prefix in mono */
+    .prefix-wrap {
+      display: flex;
+      align-items: baseline;
+      border-bottom: 1.5px solid rgba(255,255,255,0.1);
+      transition: border-color 0.2s ease;
+    }
+
+    .prefix-wrap:focus-within { border-bottom-color: var(--cyan); }
+
+    .input-prefix {
+      font-family: var(--f-mono);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--cyan);
+      padding: 9px 6px 9px 0;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .prefix-wrap .field-input {
+      border-bottom: none;
+      padding-left: 0;
+      font-family: var(--f-mono);
+      font-size: 0.96rem;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-join {
+      width: 100%;
+      margin-top: 38px;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 5px;
+      background: var(--blue);
+      color: white;
+      font-family: var(--f-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.025em;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+    }
+
+    /* Diagonal cyan shimmer */
+    .btn-join::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 45%, rgba(0,229,255,0.18) 100%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn-join:hover {
+      background: #0A4FDE;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(11,92,255,0.42);
+    }
+
+    .btn-join:hover::after { opacity: 1; }
+    .btn-join:active { transform: none; box-shadow: none; }
+    .btn-join svg { width: 17px; height: 17px; fill: white; flex-shrink: 0; }
+
+    .error-msg {
+      margin-top: 18px;
+      padding: 11px 14px;
+      border-radius: 4px;
+      background: rgba(255,61,90,0.09);
+      border-left: 3px solid var(--danger);
+      color: #FF8FA3;
+      font-size: 0.86rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* ── MEETING ROOM ────────────────────────────────────────────── */
+    #meeting-room {
+      display: none;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .meeting-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 22px;
+      background: var(--navy-mid);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-logomark {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .header-logomark svg { width: 16px; height: 16px; fill: white; }
+
+    .header-wordmark {
+      font-family: var(--f-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .meeting-meta {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .room-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 14px;
+      border-radius: 4px;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.16);
+    }
+
+    .pulse-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 7px var(--cyan);
+      animation: blink 1.8s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.28; }
+    }
+
+    .room-hash {
+      font-family: var(--f-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--cyan);
+    }
+
+    #header-room-id {
+      font-family: var(--f-mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--cyan);
+      letter-spacing: 0.02em;
+    }
+
+    .participant-count {
+      font-family: var(--f-mono);
+      font-size: 0.76rem;
+      color: var(--muted-lt);
+    }
+
+    .participant-count span {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Video grid */
+    #video-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-auto-rows: 1fr;
+      gap: 8px;
+      padding: 12px;
+      overflow-y: auto;
+      align-content: start;
+      background: var(--navy);
+    }
+
+    .video-tile {
+      position: relative;
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--navy-light);
+      border: 1px solid rgba(255,255,255,0.04);
+      aspect-ratio: 16/9;
+    }
+
+    /* ── SIGNATURE: signal bar on left edge ─────────────── */
+    .video-tile::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0;
+      width: 3px;
+      height: 0;
+      z-index: 3;
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* Local tile — static, always fully lit */
+    .video-tile.local-tile::before {
+      height: 100%;
+      background: linear-gradient(to bottom, var(--cyan), var(--blue));
+      box-shadow: 0 0 10px rgba(0,229,255,0.5);
+    }
+
+    /* Remote tile — charges in on arrival */
+    .video-tile:not(.local-tile)::before {
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,229,255,0.3);
+      animation: signalCharge 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes signalCharge {
+      0%   { height: 0;    opacity: 1; }
+      75%  { height: 100%; opacity: 1; }
+      100% { height: 100%; opacity: 0.5; }
+    }
+
+    .video-tile video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tile-label {
+      position: absolute;
+      bottom: 10px; left: 12px;
+      background: rgba(10,17,40,0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: var(--text);
+      font-size: 0.76rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 3px;
+      max-width: calc(100% - 24px);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .tile-muted-icon {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(255,61,90,0.9);
+      border-radius: 50%;
+      width: 26px; height: 26px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tile-muted-icon svg { width: 13px; height: 13px; fill: white; }
+    .tile-muted-icon.visible { display: flex; }
+
+    .video-off-placeholder {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: var(--navy-light);
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .video-off-placeholder.visible { display: flex; }
+
+    .avatar-circle {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--f-display);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: white;
+    }
+
+    /* Control bar — single frosted pill */
+    .control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px;
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+
+    .control-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: rgba(11,17,40,0.92);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 60px;
+      padding: 6px 8px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    .ctrl-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      border: none;
+      background: transparent;
+      border-radius: 50px;
+      padding: 11px 22px;
+      cursor: pointer;
+      color: var(--muted-lt);
+      font-family: var(--f-body);
+      font-size: 0.69rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: background 0.18s, color 0.18s, transform 0.15s;
+      min-width: 80px;
+    }
+
+    .ctrl-btn svg {
+      width: 20px; height: 20px;
+      fill: var(--muted-lt);
+      transition: fill 0.18s;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .ctrl-btn:hover svg { fill: var(--text); }
+
+    .ctrl-btn.muted     { color: var(--danger); }
+    .ctrl-btn.muted svg { fill: var(--danger); }
+    .ctrl-btn.cam-off     { color: var(--danger); }
+    .ctrl-btn.cam-off svg { fill: var(--danger); }
+
+    .ctrl-pill-divider {
+      width: 1px; height: 36px;
+      background: rgba(255,255,255,0.07);
+      margin: 0 6px;
+      flex-shrink: 0;
+    }
+
+    .ctrl-btn-leave {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      background: var(--danger);
+      border-radius: 50px;
+      padding: 12px 24px;
+      cursor: pointer;
+      color: white;
+      font-family: var(--f-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+    }
+
+    .ctrl-btn-leave svg { width: 16px; height: 16px; fill: white; }
+
+    .ctrl-btn-leave:hover {
+      background: var(--danger-dk);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(255,61,90,0.35);
+    }
+
+    /* Toasts — mono font to feel like system events */
+    #toast-container {
+      position: fixed;
+      bottom: 100px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(13,26,58,0.96);
+      border: 1px solid rgba(0,229,255,0.16);
+      border-radius: 4px;
+      padding: 9px 16px;
+      font-family: var(--f-mono);
+      font-size: 0.8rem;
+      color: var(--muted-lt);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: toastIn 0.22s ease forwards, toastOut 0.28s ease 2.7s forwards;
+    }
+
+    @keyframes toastIn  { to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { to { opacity: 0; transform: translateY(-6px); } }
+
+    /* Scrollbar */
+    #video-grid::-webkit-scrollbar { width: 4px; }
+    #video-grid::-webkit-scrollbar-track { background: transparent; }
+    #video-grid::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 2px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #entrance-screen { grid-template-columns: 1fr; }
+
+      .entrance-brand {
+        flex-direction: row;
+        align-items: center;
+        padding: 18px 24px;
+        justify-content: flex-start;
+      }
+
+      .entrance-brand .brand-hero,
+      .entrance-brand .brand-features { display: none; }
+
+      .entrance-form-panel { padding: 32px 24px; align-items: flex-start; }
+
+      #video-grid { grid-template-columns: 1fr; }
+
+      .ctrl-btn { min-width: 64px; padding: 10px 14px; }
+      .ctrl-btn-leave { padding: 10px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .video-tile:not(.local-tile)::before { animation: none; height: 100%; opacity: 0.5; }
+      .pulse-dot { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── ENTRANCE ──────────────────────────────────────────────── -->
+  <div id="entrance-screen">
+
+    <div class="entrance-brand">
+      <div class="brand-logo">
+        <div class="brand-logomark">
+          <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        </div>
+        <span class="brand-wordmark">NexMeet</span>
+      </div>
+
+      <div class="brand-hero">
+        <p class="brand-eyebrow">Real-time collaboration</p>
+        <h2 class="brand-headline">Where teams<br>meet <em>face</em><br>to face.</h2>
+        <p class="brand-desc">Instant peer-to-peer video — no downloads, no plugins. Just a room ID and you're in.</p>
+      </div>
+
+      <div class="brand-features">
+        <div class="brand-feature">
+          <div class="feature-dot"></div>
+          <span>Encrypted peer-to-peer connections</span>
+        </div>
+        <div class="brand-feature">
+          <div class="feature-dot"></div>
+          <span>No account or download required</span>
+        </div>
+        <div class="brand-feature">
+          <div class="feature-dot"></div>
+          <span>Works in any modern browser</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="entrance-form-panel">
+      <div class="form-inner">
+        <h1 class="form-heading">Join a room</h1>
+        <p class="form-sub">Enter your name and a room ID to connect instantly.</p>
+
+        <form id="join-form">
+          <div class="field">
+            <label class="field-label" for="display-name">Your name</label>
+            <input
+              class="field-input"
+              id="display-name"
+              type="text"
+              placeholder="Alex Johnson"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="room-id">Room ID</label>
+            <div class="prefix-wrap">
+              <span class="input-prefix">#</span>
+              <input
+                class="field-input"
+                id="room-id"
+                type="text"
+                placeholder="team-standup"
+                autocomplete="off"
+                required
+              />
+            </div>
+          </div>
+
+          <button class="btn-join" type="submit">
+            <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            Join Meeting
+          </button>
+
+          <div class="error-msg" id="error-msg"></div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── MEETING ROOM ──────────────────────────────────────────── -->
+  <div id="meeting-room">
+
+    <header class="meeting-header">
+      <div class="header-brand">
+        <div class="header-logomark">
+          <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        </div>
+        <span class="header-wordmark">NexMeet</span>
+      </div>
+
+      <div class="meeting-meta">
+        <div class="room-badge">
+          <div class="pulse-dot"></div>
+          <span class="room-hash">#</span><span id="header-room-id">—</span>
+        </div>
+        <div class="participant-count">
+          <span id="peer-count">1</span> online
+        </div>
+      </div>
+    </header>
+
+    <div id="video-grid"></div>
+
+    <div class="control-bar">
+      <div class="control-pill">
+
+        <button class="ctrl-btn" id="btn-mute" title="Toggle Microphone">
+          <svg id="icon-mic-on" viewBox="0 0 24 24">
+            <path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/>
+          </svg>
+          <svg id="icon-mic-off" viewBox="0 0 24 24" style="display:none">
+            <path d="M19 11h-1.7c0 .74-.16 1.43-.43 2.05l1.23 1.23c.56-.98.9-2.09.9-3.28zm-4.02.17c0-.06.02-.11.02-.17V5c0-1.66-1.34-3-3-3S9 3.34 9 5v.18l5.98 5.99zM4.27 3L3 4.27l6.01 6.01V11c0 1.66 1.33 3 2.99 3 .22 0 .44-.03.65-.08l1.66 1.66c-.71.33-1.5.52-2.31.52-2.76 0-5.3-2.1-5.3-5.1H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c.91-.13 1.77-.45 2.54-.9L19.73 21 21 19.73 4.27 3z"/>
+          </svg>
+          <span id="label-mute">Mute</span>
+        </button>
+
+        <button class="ctrl-btn" id="btn-camera" title="Toggle Camera">
+          <svg id="icon-cam-on" viewBox="0 0 24 24">
+            <path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z"/>
+          </svg>
+          <svg id="icon-cam-off" viewBox="0 0 24 24" style="display:none">
+            <path d="M21 6.5l-4-4-9.5 9.5-2 2L3 15.5V17h1.5l2-2 1.5-1.5L12.5 18H16a1 1 0 0 0 1-1v-3.5l4 4V6.5zM3.27 2L2 3.27 5.73 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12c.28 0 .53-.12.71-.29l1.02 1.02L19 21.27 3.27 2z"/>
+          </svg>
+          <span id="label-camera">Stop Video</span>
+        </button>
+
+        <div class="ctrl-pill-divider"></div>
+
+        <button class="ctrl-btn-leave" id="btn-leave" title="Leave Meeting">
+          <svg viewBox="0 0 24 24">
+            <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5a2 2 0 0 0-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/>
+          </svg>
+          Leave
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
