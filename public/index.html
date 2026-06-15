@@ -42,7 +42,6 @@
       height: 100vh;
     }
 
-    /* Left — brand panel */
     .entrance-brand {
       position: relative;
       background: linear-gradient(155deg, #0C2268 0%, var(--navy) 65%);
@@ -53,7 +52,6 @@
       overflow: hidden;
     }
 
-    /* Subtle technical grid */
     .entrance-brand::before {
       content: '';
       position: absolute;
@@ -65,7 +63,6 @@
       pointer-events: none;
     }
 
-    /* Blue glow orb */
     .entrance-brand::after {
       content: '';
       position: absolute;
@@ -180,6 +177,7 @@
       align-items: center;
       justify-content: center;
       padding: 48px 52px;
+      overflow-y: auto;
     }
 
     .form-inner { width: 100%; max-width: 360px; }
@@ -195,8 +193,117 @@
     .form-sub {
       font-size: 0.9rem;
       color: var(--muted-lt);
-      margin-bottom: 42px;
+      margin-bottom: 32px;
       line-height: 1.55;
+    }
+
+    /* New Meeting button */
+    .btn-new-meeting {
+      width: 100%;
+      padding: 14px 20px;
+      border: 1.5px solid rgba(0,229,255,0.35);
+      border-radius: 5px;
+      background: transparent;
+      color: var(--cyan);
+      font-family: var(--f-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.025em;
+      transition: border-color 0.18s, background 0.18s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-new-meeting::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,229,255,0.06);
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+
+    .btn-new-meeting:hover { border-color: var(--cyan); transform: translateY(-1px); }
+    .btn-new-meeting:hover::after { opacity: 1; }
+    .btn-new-meeting:active { transform: none; }
+    .btn-new-meeting svg { width: 17px; height: 17px; fill: var(--cyan); flex-shrink: 0; }
+
+    /* Share link box */
+    .share-link-box {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 6px;
+      background: rgba(0,229,255,0.05);
+      border: 1px solid rgba(0,229,255,0.18);
+    }
+
+    .share-link-label {
+      font-size: 0.78rem;
+      color: var(--muted-lt);
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+
+    .share-link-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .share-link-url {
+      flex: 1;
+      font-family: var(--f-mono);
+      font-size: 0.72rem;
+      color: var(--cyan);
+      word-break: break-all;
+      line-height: 1.45;
+    }
+
+    .btn-copy-link {
+      background: transparent;
+      border: 1px solid rgba(0,229,255,0.3);
+      border-radius: 4px;
+      padding: 6px 13px;
+      color: var(--cyan);
+      font-family: var(--f-body);
+      font-size: 0.77rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.03em;
+      transition: background 0.18s, border-color 0.18s;
+    }
+
+    .btn-copy-link:hover {
+      background: rgba(0,229,255,0.1);
+      border-color: var(--cyan);
+    }
+
+    /* Divider */
+    .form-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0;
+      color: var(--muted);
+      font-family: var(--f-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .form-divider::before,
+    .form-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
     }
 
     .field { margin-bottom: 28px; }
@@ -212,7 +319,6 @@
       margin-bottom: 11px;
     }
 
-    /* Underline-only inputs — cleaner than boxed */
     .field-input {
       width: 100%;
       background: transparent;
@@ -229,7 +335,6 @@
     .field-input::placeholder { color: var(--muted); }
     .field-input:focus { border-bottom-color: var(--cyan); }
 
-    /* Room ID with # prefix in mono */
     .prefix-wrap {
       display: flex;
       align-items: baseline;
@@ -279,7 +384,6 @@
       transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
     }
 
-    /* Diagonal cyan shimmer */
     .btn-join::after {
       content: '';
       position: absolute;
@@ -400,9 +504,38 @@
       color: var(--muted-lt);
     }
 
-    .participant-count span {
-      color: var(--text);
+    .participant-count span { color: var(--text); font-weight: 600; }
+
+    /* Share meeting link button in header */
+    .btn-share-meeting {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border: 1px solid rgba(0,229,255,0.25);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--cyan);
+      font-family: var(--f-body);
+      font-size: 0.78rem;
       font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: background 0.18s, border-color 0.18s;
+    }
+
+    .btn-share-meeting:hover {
+      background: rgba(0,229,255,0.08);
+      border-color: var(--cyan);
+    }
+
+    .btn-share-meeting svg { width: 14px; height: 14px; fill: var(--cyan); }
+
+    /* Meeting body — video + chat side by side */
+    .meeting-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
     }
 
     /* Video grid */
@@ -416,6 +549,7 @@
       overflow-y: auto;
       align-content: start;
       background: var(--navy);
+      min-width: 0;
     }
 
     .video-tile {
@@ -427,7 +561,6 @@
       aspect-ratio: 16/9;
     }
 
-    /* ── SIGNATURE: signal bar on left edge ─────────────── */
     .video-tile::before {
       content: '';
       position: absolute;
@@ -438,14 +571,12 @@
       border-radius: 0 2px 2px 0;
     }
 
-    /* Local tile — static, always fully lit */
     .video-tile.local-tile::before {
       height: 100%;
       background: linear-gradient(to bottom, var(--cyan), var(--blue));
       box-shadow: 0 0 10px rgba(0,229,255,0.5);
     }
 
-    /* Remote tile — charges in on arrival */
     .video-tile:not(.local-tile)::before {
       background: var(--cyan);
       box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,229,255,0.3);
@@ -458,11 +589,7 @@
       100% { height: 100%; opacity: 0.5; }
     }
 
-    .video-tile video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .video-tile video { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .tile-label {
       position: absolute;
@@ -519,7 +646,143 @@
       color: white;
     }
 
-    /* Control bar — single frosted pill */
+    /* ── CHAT PANEL ──────────────────────────────────────────────── */
+    .chat-panel {
+      width: 340px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--navy-mid);
+      border-left: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .chat-panel.hidden { display: none; }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+
+    .chat-title {
+      font-family: var(--f-display);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .chat-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted-lt);
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .chat-close-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+    .chat-close-btn svg { width: 17px; height: 17px; fill: currentColor; }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .chat-messages::-webkit-scrollbar { width: 3px; }
+    .chat-messages::-webkit-scrollbar-track { background: transparent; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 2px; }
+
+    .chat-empty {
+      color: var(--muted);
+      font-size: 0.84rem;
+      text-align: center;
+      margin-top: 48px;
+      line-height: 1.55;
+    }
+
+    .chat-msg { display: flex; flex-direction: column; gap: 4px; }
+
+    .chat-msg-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .chat-msg-sender {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .chat-msg.own .chat-msg-sender { color: var(--cyan); }
+
+    .chat-msg-time {
+      font-family: var(--f-mono);
+      font-size: 0.67rem;
+      color: var(--muted);
+    }
+
+    .chat-msg-content {
+      font-size: 0.875rem;
+      color: var(--muted-lt);
+      line-height: 1.55;
+      word-break: break-word;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      gap: 8px;
+      padding: 14px 14px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+
+    #chat-input {
+      flex: 1;
+      background: var(--navy-light);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 6px;
+      padding: 9px 13px;
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.18s;
+      min-width: 0;
+    }
+
+    #chat-input:focus { border-color: rgba(0,229,255,0.3); }
+    #chat-input::placeholder { color: var(--muted); }
+
+    .btn-chat-send {
+      background: var(--blue);
+      border: none;
+      border-radius: 6px;
+      padding: 9px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.18s, transform 0.15s;
+    }
+
+    .btn-chat-send:hover { background: #0A4FDE; transform: translateY(-1px); }
+    .btn-chat-send:active { transform: none; }
+    .btn-chat-send svg { width: 17px; height: 17px; fill: white; }
+
+    /* ── CONTROL BAR ─────────────────────────────────────────────── */
     .control-bar {
       display: flex;
       align-items: center;
@@ -567,12 +830,7 @@
       transition: fill 0.18s;
     }
 
-    .ctrl-btn:hover {
-      background: rgba(255,255,255,0.07);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
+    .ctrl-btn:hover { background: rgba(255,255,255,0.07); color: var(--text); transform: translateY(-1px); }
     .ctrl-btn:hover svg { fill: var(--text); }
 
     .ctrl-btn.muted     { color: var(--danger); }
@@ -580,12 +838,38 @@
     .ctrl-btn.cam-off     { color: var(--danger); }
     .ctrl-btn.cam-off svg { fill: var(--danger); }
 
+    .ctrl-btn.chat-active     { color: var(--cyan); }
+    .ctrl-btn.chat-active svg { fill: var(--cyan); }
+
     .ctrl-pill-divider {
       width: 1px; height: 36px;
       background: rgba(255,255,255,0.07);
       margin: 0 6px;
       flex-shrink: 0;
     }
+
+    /* Chat button with unread badge */
+    .ctrl-btn-wrap {
+      position: relative;
+    }
+
+    .chat-unread-badge {
+      position: absolute;
+      top: 7px; right: 12px;
+      background: var(--cyan);
+      color: var(--navy);
+      font-family: var(--f-mono);
+      font-size: 0.6rem;
+      font-weight: 700;
+      min-width: 16px; height: 16px;
+      border-radius: 8px;
+      padding: 0 3px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chat-unread-badge.visible { display: flex; }
 
     .ctrl-btn-leave {
       display: flex;
@@ -612,7 +896,62 @@
       box-shadow: 0 6px 20px rgba(255,61,90,0.35);
     }
 
-    /* Toasts — mono font to feel like system events */
+    /* ── COPY MEETING LINK POPOVER ───────────────────────────────── */
+    .share-popover {
+      position: fixed;
+      top: 62px; right: 20px;
+      width: 320px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 8px;
+      padding: 18px;
+      z-index: 1000;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .share-popover.hidden { display: none; }
+
+    .share-popover-label {
+      font-size: 0.8rem;
+      color: var(--muted-lt);
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .share-popover-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .share-popover-url {
+      flex: 1;
+      font-family: var(--f-mono);
+      font-size: 0.7rem;
+      color: var(--cyan);
+      word-break: break-all;
+      line-height: 1.45;
+    }
+
+    .btn-copy-popover {
+      background: transparent;
+      border: 1px solid rgba(0,229,255,0.3);
+      border-radius: 4px;
+      padding: 6px 13px;
+      color: var(--cyan);
+      font-family: var(--f-body);
+      font-size: 0.77rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.03em;
+      transition: background 0.18s, border-color 0.18s;
+    }
+
+    .btn-copy-popover:hover { background: rgba(0,229,255,0.1); border-color: var(--cyan); }
+
+    /* Toasts */
     #toast-container {
       position: fixed;
       bottom: 100px; left: 50%;
@@ -664,6 +1003,8 @@
 
       #video-grid { grid-template-columns: 1fr; }
 
+      .chat-panel { position: absolute; inset: 0; width: 100%; z-index: 10; }
+
       .ctrl-btn { min-width: 64px; padding: 10px 14px; }
       .ctrl-btn-leave { padding: 10px 18px; }
     }
@@ -690,7 +1031,7 @@
       <div class="brand-hero">
         <p class="brand-eyebrow">Real-time collaboration</p>
         <h2 class="brand-headline">Where teams<br>meet <em>face</em><br>to face.</h2>
-        <p class="brand-desc">Instant peer-to-peer video — no downloads, no plugins. Just a room ID and you're in.</p>
+        <p class="brand-desc">Instant peer-to-peer video — no downloads, no plugins. Create a room and share the link.</p>
       </div>
 
       <div class="brand-features">
@@ -700,19 +1041,34 @@
         </div>
         <div class="brand-feature">
           <div class="feature-dot"></div>
-          <span>No account or download required</span>
+          <span>Share meeting links instantly</span>
         </div>
         <div class="brand-feature">
           <div class="feature-dot"></div>
-          <span>Works in any modern browser</span>
+          <span>In-call chat with message history</span>
         </div>
       </div>
     </div>
 
     <div class="entrance-form-panel">
       <div class="form-inner">
-        <h1 class="form-heading">Join a room</h1>
-        <p class="form-sub">Enter your name and a room ID to connect instantly.</p>
+        <h1 class="form-heading">Start or join</h1>
+        <p class="form-sub">Host or join a secure peer-to-peer video call.</p>
+
+        <button class="btn-new-meeting" id="btn-new-meeting" type="button">
+          <svg viewBox="0 0 24 24"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4zM11 8h2v3h3v2h-3v3h-2v-3H8v-2h3V8z"/></svg>
+          New Meeting
+        </button>
+
+        <div class="share-link-box" id="share-link-box" style="display:none">
+          <p class="share-link-label">Share this link with people you want in the meeting</p>
+          <div class="share-link-row">
+            <span id="share-link-url" class="share-link-url"></span>
+            <button id="btn-copy-link" class="btn-copy-link" type="button">Copy</button>
+          </div>
+        </div>
+
+        <div class="form-divider"><span>or enter a room code</span></div>
 
         <form id="join-form">
           <div class="field">
@@ -773,10 +1129,50 @@
         <div class="participant-count">
           <span id="peer-count">1</span> online
         </div>
+        <button class="btn-share-meeting" id="btn-share-meeting" type="button">
+          <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+          Share link
+        </button>
       </div>
     </header>
 
-    <div id="video-grid"></div>
+    <!-- Share link popover (in-meeting) -->
+    <div id="share-popover" class="share-popover hidden">
+      <p class="share-popover-label">Send this link to invite others to the meeting</p>
+      <div class="share-popover-row">
+        <span id="share-popover-url" class="share-popover-url"></span>
+        <button id="btn-copy-popover" class="btn-copy-popover" type="button">Copy</button>
+      </div>
+    </div>
+
+    <div class="meeting-body">
+      <div id="video-grid"></div>
+
+      <!-- Chat panel -->
+      <div id="chat-panel" class="chat-panel hidden">
+        <div class="chat-header">
+          <span class="chat-title">In-call messages</span>
+          <button id="btn-close-chat" class="chat-close-btn" type="button">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+          <p class="chat-empty">No messages yet. Say hello!</p>
+        </div>
+        <div class="chat-input-bar">
+          <input
+            id="chat-input"
+            type="text"
+            placeholder="Send a message to everyone…"
+            maxlength="500"
+            autocomplete="off"
+          />
+          <button id="btn-chat-send" class="btn-chat-send" type="button">
+            <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div class="control-bar">
       <div class="control-pill">
@@ -800,6 +1196,18 @@
           </svg>
           <span id="label-camera">Stop Video</span>
         </button>
+
+        <div class="ctrl-pill-divider"></div>
+
+        <div class="ctrl-btn-wrap">
+          <button class="ctrl-btn" id="btn-chat" title="In-call messages">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+            </svg>
+            Chat
+          </button>
+          <span class="chat-unread-badge" id="chat-unread-badge"></span>
+        </div>
 
         <div class="ctrl-pill-divider"></div>
 
